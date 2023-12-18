@@ -1,0 +1,81 @@
+#!/bin/bash
+clear
+
+alias_to_add='alias duckx="cd && cd DUCKX && chmod +x * && ./duckx"'
+
+if ! grep -qxF "$alias_to_add" ~/.bashrc; then
+    echo "$alias_to_add" >> ~/.bashrc
+    echo "Alias ajouté à ~/.bashrc"
+fi
+
+url=$2
+wordlist=$4
+
+version=$(httpd -v | awk -F'[ /]' '/Server version/ {print $4}')
+open_ports=$(netstat -tln | awk '/^tcp/ {print $4}' | awk -F: '{print $NF}' | paste -sd,)
+target=$url
+
+clear
+
+
+echo -e "\e[33m                        AAAAAAAA"
+echo "                      AAAAAAAAAAAA       "
+echo "                     AAAAAAAAAAAAAA      "
+echo "                    AAAAAAAAAAAAAAAAAAAZ "
+echo "                    AAAAAAAAAaaAAAAAAAA  "
+echo "        A            AAAAAAAAAAAAAAAA    "
+echo "       AAAA           AAAAAAAAAAAAm      "
+echo "       AAAAAA           AAAAAAAAAA       "
+echo "       AAAAAAAAAAAAAAAAAAAAAAAAAAA       "
+echo "       AAAAAAA      VAAA  VAAV  AAAAA    "
+echo "       VAAAAAA  AAA  VAAA  VV  AAAAAAA   "
+echo "       lAAAAAA  AAAA  VAAA    AAAAA9HH   "
+echo "        AAAAAA  VVVV  AAVV    VAAAAVV    "
+echo "        VAAAAA  VVV  AAAV  AA  VAAAAV    "
+echo "         VGAAV      AAVV  AAAA  VAAV     "
+echo "           VAVfUNGAAAAAAAAAG9AAUHV       "
+echo
+sleep 0.1
+echo -e "\e[31m  d8888b. db    db  .o88b. db   dD db    db"
+echo "  88   8D 88    88 d8P  Y8 88 ,8P   8b  d8      "
+echo "  88   88 88    88 8P      88,8P     8bd8       "
+echo "  88   88 88    88 8b      88 8b    .dPYb.      "
+echo "  88  .8D 88b  d88 Y8b  d8 88  88. .8P  Y8.     "
+echo -e "  Y8888D' ~Y8888P'   Y88P' YP   YD YP    YP\e[0m"
+sleep 0.1
+echo -e "\e[34m                                    TRABBIT\e[0m"
+echo
+sleep 0.1
+echo -e "\e[33m==================================================="
+echo -e "\e[32m           * ADMIN PANEL FINDER TOOL *   \e[0m"
+echo -e "\e[33m---------------------------------------------------\e[0m"
+sleep 0.1
+echo -e "\e[33m  [\e[31m+\e[33m] DEVELOPED BY => \e[36mTRABBIT           \e[0m"
+sleep 0.1
+echo -e "\e[33m  [\e[31m+\e[33m] VERSION => \e[36m$version         \e[0m "
+sleep 0.1
+echo -e "\e[33m  [\e[31m+\e[33m] TARGET => \e[36m$target    \e[0m "
+sleep 0.3
+echo -e "\e[33m===================================================\e[0m       "
+echo -e "\e[33m                # ATTACK STARTED #               \e[0m       "
+echo -e "\e[33m===================================================\e[0m       "
+sleep 0.4
+echo
+
+while read -r path; do
+  response=$(curl -s -o /dev/null -w "%{http_code}" $target/$path)
+  if [[ $response == "301" ]]; then
+    echo "Admin panel found: $target/$path => $response"
+    echo
+   sleep 0.4
+    echo -e "\e[33m                   RESULTS                         "
+    echo -e "===================================================\e[0m      "
+    echo "                    DONE                                    "
+    echo -e "\e[33m---------------------------------------------------\e[0m"
+    echo -e "\e[32m  FOUND  ==>  $target/$path            \e[0m"
+    echo -e "\e[33m===================================================\e[0m"
+    exit
+  elif [ "$response" == "400"  ]; then
+    echo "NOT The Admin Page $target/$path => $response"
+  fi
+done < $wordlist
